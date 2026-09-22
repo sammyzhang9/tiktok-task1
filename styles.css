@@ -353,8 +353,7 @@ img {
 }
 
 .share-tip {
-  /* Shifted inward so the leftmost contact's tip clears the sheet edge. */
-  --tip-nudge: 12px;
+  --tip-nudge: 0px;
   position: absolute;
   left: calc(50% + var(--tip-nudge));
   bottom: calc(100% + 8px);
@@ -372,6 +371,15 @@ img {
   transform-origin: calc(50% - var(--tip-nudge)) 100%;
   pointer-events: none;
   transition: opacity 140ms ease, transform 140ms ease;
+}
+
+/* Edge columns shift their bubble inward so it clears the sheet, tail stays on the avatar. */
+.contacts__row .contact:first-child .share-tip {
+  --tip-nudge: 12px;
+}
+
+.contacts__row .contact:last-child .share-tip {
+  --tip-nudge: -12px;
 }
 
 .share-tip::after {

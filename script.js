@@ -1,4 +1,3 @@
-const WARN_MESSAGE = "sammy already sent you this video 3 days ago";
 const WARN_TIMEOUT = 2600;
 const SENT_TIMEOUT = 1100;
 
@@ -6,16 +5,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const sheet = document.querySelector(".sheet");
   const searchBtn = document.querySelector(".search-btn");
   const closeBtn = document.querySelector(".close-btn");
-  const contacts = document.querySelectorAll(".contact");
   const contactList = document.querySelector(".contacts");
-  const duplicate = document.querySelector(".contact--duplicate");
-  const duplicateMedia = duplicate.querySelector(".contact__media");
+  const contacts = [...document.querySelectorAll(".contact")];
   const input = document.querySelector(".composer__input");
   const emojiButtons = document.querySelectorAll(".emoji");
   const sendBtn = document.querySelector(".composer__send");
   const announcer = document.querySelector(".sr-announcer");
 
   let phase = "idle";
+  let warned = null;
   let timer = null;
   let scrollTimer = null;
 
@@ -30,14 +28,18 @@ document.addEventListener("DOMContentLoaded", () => {
     scrollTimer = null;
   };
 
-  const selected = () => document.querySelectorAll(".contact.is-selected");
+  const clearWarning = () => {
+    if (!warned) return;
+    warned.classList.remove("is-tipped", "is-warned");
+    warned = null;
+  };
 
   const goIdle = () => {
     clearTimers();
+    clearWarning();
     phase = "idle";
     sheet.classList.remove("is-composing");
     contactList.classList.remove("is-scrollable");
-    duplicate.classList.remove("is-tipped", "is-warned");
     contacts.forEach((contact) => contact.classList.remove("is-selected"));
     sendBtn.classList.remove("is-done");
     sendBtn.textContent = "Send";
@@ -45,50 +47,49 @@ document.addEventListener("DOMContentLoaded", () => {
     announce("");
   };
 
-  const warn = () => {
+  const warn = (contact) => {
     clearTimers();
-    // Drop the motion classes and flush styles so the recoil replays on re-entry.
-    duplicate.classList.remove("is-warned");
-    void duplicateMedia.offsetWidth;
+    clearWarning();
+    // Flush styles so the recoil replays when the same contact is re-armed.
+    contact.classList.remove("is-warned");
+    void contact.querySelector(".contact__media").offsetWidth;
 
     phase = "warned";
-    duplicate.classList.add("is-tipped", "is-warned");
-    announce(WARN_MESSAGE);
+    warned = contact;
+    contact.classList.add("is-tipped", "is-warned");
+    announce(
+      `${contact.dataset.name} already sent you this video ${contact.dataset.sentAgo}`
+    );
     navigator.vibrate?.([18, 40, 18]);
     timer = setTimeout(goIdle, WARN_TIMEOUT);
   };
 
-  const openComposer = () => {
+  const openComposer = (contact) => {
     clearTimers();
+    clearWarning();
     phase = "composing";
-    duplicate.classList.add("is-selected");
+    contact.classList.add("is-selected");
     sheet.classList.add("is-composing");
-    announce("sending to sammy anyway — add a message");
+    announce(`add a message for ${contact.dataset.name}`);
     navigator.vibrate?.(24);
     // Let the row finish reflowing before it becomes scrollable.
     scrollTimer = setTimeout(() => contactList.classList.add("is-scrollable"), 400);
   };
 
-  duplicate.addEventListener("click", () => {
-    if (phase === "idle") {
-      warn();
-    } else if (phase === "warned") {
-      openComposer();
-    } else {
-      duplicate.classList.toggle("is-selected");
-    }
-  });
-
   contacts.forEach((contact) => {
-    if (contact === duplicate) return;
-
     contact.addEventListener("click", () => {
       if (phase === "composing") {
         contact.classList.toggle("is-selected");
         return;
       }
-      // Picking someone else disarms the duplicate warning.
-      goIdle();
+
+      // A friend who already shared this video gets one nudge before it sends.
+      if (contact.classList.contains("contact--duplicate") && warned !== contact) {
+        warn(contact);
+        return;
+      }
+
+      openComposer(contact);
     });
   });
 
@@ -105,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
     clearTimers();
     sendBtn.classList.add("is-done");
     sendBtn.textContent = "Sent";
-    const count = selected().length;
+    const count = document.querySelectorAll(".contact.is-selected").length;
     announce(`sent to ${count} ${count === 1 ? "person" : "people"}`);
     navigator.vibrate?.(24);
     timer = setTimeout(goIdle, SENT_TIMEOUT);
