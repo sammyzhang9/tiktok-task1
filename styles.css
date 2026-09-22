@@ -514,10 +514,10 @@ img {
   padding: 0 10px;
   flex-direction: row;
   gap: 8px;
-  overflow-x: hidden;
 }
 
-/* Deferred until the layout settles so the warning tip is not clipped mid-fade. */
+/* Deferred so the warning tip can fade out before overflow starts clipping it.
+   Until then the row simply overflows and the phone frame clips it at the same edge. */
 .sheet.is-composing .contacts.is-scrollable {
   overflow-x: auto;
   scrollbar-width: none;
@@ -547,6 +547,8 @@ img {
 }
 
 .sheet.is-composing .contact__check {
+  right: 0;
+  bottom: 0;
   width: 16px;
   height: 16px;
   border-width: 1.5px;
@@ -595,7 +597,7 @@ img {
   background: none;
   resize: none;
   font-family: inherit;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 400;
   font-variation-settings: "wdth" 100;
   line-height: 19px;

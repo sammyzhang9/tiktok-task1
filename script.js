@@ -105,7 +105,8 @@ document.addEventListener("DOMContentLoaded", () => {
     clearTimers();
     sendBtn.classList.add("is-done");
     sendBtn.textContent = "Sent";
-    announce(`sent to ${selected().length} ${selected().length === 1 ? "person" : "people"}`);
+    const count = selected().length;
+    announce(`sent to ${count} ${count === 1 ? "person" : "people"}`);
     navigator.vibrate?.(24);
     timer = setTimeout(goIdle, SENT_TIMEOUT);
   });
