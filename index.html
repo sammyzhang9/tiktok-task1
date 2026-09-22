@@ -68,6 +68,8 @@
               type="button"
               data-name="sammy"
               data-sent-ago="3 days ago"
+              data-sent-short="3d ago"
+              data-caption="we should go to the ramen"
             >
               <span class="contact__media">
                 <img class="contact__avatar" src="assets/avatar-sammy.png" alt="" />
@@ -89,6 +91,8 @@
               type="button"
               data-name="juliekgon"
               data-sent-ago="5 hours ago"
+              data-sent-short="5h ago"
+              data-caption="wait this is the place"
             >
               <span class="contact__media">
                 <img class="contact__avatar" src="assets/avatar-juliekgon.png" alt="" />
@@ -119,6 +123,8 @@
               type="button"
               data-name="jolina"
               data-sent-ago="1 week ago"
+              data-sent-short="1w ago"
+              data-caption="adding this to the list"
             >
               <span class="contact__media">
                 <img class="contact__avatar" src="assets/avatar-jolina.png" alt="" />
@@ -147,6 +153,23 @@
 
         <div class="composer">
           <div class="composer__divider"></div>
+          <button class="jump" type="button" tabindex="-1" aria-hidden="true">
+            <span class="jump__accent"></span>
+            <span class="jump__card">
+              <span class="jump__cluster">
+                <span class="jump__copy">
+                  <span class="jump__label"></span>
+                  <span class="jump__more"></span>
+                </span>
+                <span class="jump__thumb-wrap">
+                  <img class="jump__thumb" src="assets/video.png" alt="" />
+                </span>
+              </span>
+              <span class="jump__go" aria-hidden="true">
+                <img src="assets/icon-jump.svg" alt="" width="20" height="20" />
+              </span>
+            </span>
+          </button>
           <textarea
             class="composer__input"
             placeholder="Write a message..."
@@ -165,6 +188,40 @@
 
         <p class="sr-announcer" role="status" aria-live="polite"></p>
       </section>
+
+      <div class="peek" aria-hidden="true" inert>
+        <header class="peek__bar">
+          <button class="peek__back" type="button" aria-label="Back to share">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M15 5L8 12L15 19"
+                stroke="#161823"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <img class="peek__who" src="assets/avatar-sammy.png" alt="" />
+          <div class="peek__meta">
+            <p class="peek__title">sammy</p>
+            <p class="peek__when">3 days ago</p>
+          </div>
+        </header>
+        <div class="peek__thread">
+          <article class="peek__msg">
+            <img class="peek__avatar" src="assets/avatar-sammy.png" alt="" />
+            <div class="peek__body">
+              <p class="peek__name">sammy</p>
+              <div class="peek__video">
+                <img class="peek__cover" src="assets/video.png" alt="" />
+                <span class="peek__play" aria-hidden="true"></span>
+              </div>
+              <p class="peek__caption">we should go to the ramen</p>
+            </div>
+          </article>
+        </div>
+      </div>
     </div>
 
     <script src="script.js"></script>
