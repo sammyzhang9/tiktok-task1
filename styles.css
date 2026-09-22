@@ -204,6 +204,13 @@ img {
   background: #fff;
   border-radius: 20px 20px 0 0;
   z-index: 3;
+  transition: top 380ms cubic-bezier(0.32, 0.72, 0.24, 1),
+    height 380ms cubic-bezier(0.32, 0.72, 0.24, 1);
+}
+
+.sheet.is-composing {
+  top: 496px;
+  height: 378px;
 }
 
 .search-btn {
@@ -250,6 +257,10 @@ img {
   flex-direction: column;
   gap: 24px;
   width: 340px;
+  transition: top 380ms cubic-bezier(0.32, 0.72, 0.24, 1),
+    left 380ms cubic-bezier(0.32, 0.72, 0.24, 1),
+    width 380ms cubic-bezier(0.32, 0.72, 0.24, 1),
+    gap 300ms ease;
 }
 
 .contacts__row {
@@ -257,6 +268,7 @@ img {
   align-items: flex-start;
   gap: 20px;
   width: 100%;
+  transition: gap 300ms ease;
 }
 
 .contact {
@@ -267,6 +279,7 @@ img {
   gap: 4px;
   width: 70px;
   flex-shrink: 0;
+  transition: width 300ms cubic-bezier(0.32, 0.72, 0.24, 1), gap 300ms ease;
 }
 
 .contact__media {
@@ -275,7 +288,9 @@ img {
   width: 70px;
   height: 70px;
   flex-shrink: 0;
-  transition: transform 140ms ease;
+  transition: transform 140ms ease,
+    width 300ms cubic-bezier(0.32, 0.72, 0.24, 1),
+    height 300ms cubic-bezier(0.32, 0.72, 0.24, 1);
 }
 
 .contact:active .contact__media {
@@ -283,8 +298,8 @@ img {
 }
 
 .contact__avatar {
-  width: 70px;
-  height: 70px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -322,19 +337,19 @@ img {
   position: absolute;
   right: -1px;
   bottom: -1px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 22px;
   height: 22px;
-  background: #fe2c55;
+  background: #fe2c55
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2.5 6.3L4.7 8.5L9.5 3.7' stroke='white' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    center / 58% no-repeat;
   border: 2px solid #fff;
   border-radius: 50%;
   opacity: 0;
   transform: scale(0.4);
   pointer-events: none;
   transition: opacity 120ms ease,
-    transform 240ms cubic-bezier(0.18, 1.4, 0.4, 1);
+    transform 240ms cubic-bezier(0.18, 1.4, 0.4, 1), width 300ms ease,
+    height 300ms ease;
 }
 
 .share-tip {
@@ -347,6 +362,11 @@ img {
   padding: 5px 10px;
   background: #161823;
   border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 14px;
+  color: #fff;
+  white-space: nowrap;
   opacity: 0;
   transform: translate(-50%, 6px) scale(0.86);
   transform-origin: calc(50% - var(--tip-nudge)) 100%;
@@ -364,26 +384,6 @@ img {
   margin-left: -5px;
   background: #161823;
   clip-path: polygon(0 0, 100% 0, 50% 100%);
-}
-
-.share-tip__label {
-  display: block;
-  font-size: 11px;
-  font-weight: 600;
-  font-variation-settings: "wdth" 100;
-  line-height: 14px;
-  color: #fff;
-  white-space: nowrap;
-  transition: opacity 140ms ease;
-}
-
-.share-tip__label--sent {
-  position: absolute;
-  left: 10px;
-  right: 10px;
-  top: 5px;
-  text-align: center;
-  opacity: 0;
 }
 
 .contact.is-tipped {
@@ -406,21 +406,13 @@ img {
   animation: contact-pulse 620ms ease-out;
 }
 
-.contact.is-sent .contact__media {
+.contact.is-selected .contact__media {
   animation: contact-pop 320ms cubic-bezier(0.2, 1.5, 0.35, 1);
 }
 
-.contact.is-sent .contact__check {
+.contact.is-selected .contact__check {
   opacity: 1;
   transform: scale(1);
-}
-
-.contact.is-sent .share-tip__label--warn {
-  opacity: 0;
-}
-
-.contact.is-sent .share-tip__label--sent {
-  opacity: 1;
 }
 
 @keyframes contact-recoil {
@@ -475,7 +467,7 @@ img {
 
 @media (prefers-reduced-motion: reduce) {
   .contact.is-warned .contact__media,
-  .contact.is-sent .contact__media {
+  .contact.is-selected .contact__media {
     animation: contact-settle 200ms ease-out;
   }
 
@@ -489,9 +481,16 @@ img {
     transition-delay: 0s;
   }
 
-  .contact.is-sent .contact__check {
+  .contact.is-selected .contact__check {
     transform: scale(1);
     transition: opacity 140ms ease;
+  }
+
+  .sheet,
+  .contacts,
+  .contact,
+  .contact__media {
+    transition-duration: 140ms;
   }
 
   @keyframes contact-settle {
@@ -504,6 +503,157 @@ img {
       transform: scale(1);
     }
   }
+}
+
+/* ---------- compose mode: attach a message before sending ---------- */
+
+.sheet.is-composing .contacts {
+  top: 48px;
+  left: 0;
+  width: 402px;
+  padding: 0 10px;
+  flex-direction: row;
+  gap: 8px;
+  overflow-x: hidden;
+}
+
+/* Deferred until the layout settles so the warning tip is not clipped mid-fade. */
+.sheet.is-composing .contacts.is-scrollable {
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.sheet.is-composing .contacts.is-scrollable::-webkit-scrollbar {
+  display: none;
+}
+
+.sheet.is-composing .contacts__row {
+  gap: 8px;
+  width: auto;
+}
+
+.sheet.is-composing .contact {
+  width: 60px;
+  gap: 6px;
+}
+
+.sheet.is-composing .contact__media {
+  width: 48px;
+  height: 48px;
+}
+
+.sheet.is-composing .contact__name {
+  line-height: 15px;
+}
+
+.sheet.is-composing .contact__check {
+  width: 16px;
+  height: 16px;
+  border-width: 1.5px;
+}
+
+.sheet.is-composing .share-tip {
+  opacity: 0;
+}
+
+.composer {
+  position: absolute;
+  top: 144px;
+  left: 0;
+  width: 402px;
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity 200ms ease, transform 260ms cubic-bezier(0.32, 0.72, 0.24, 1);
+}
+
+.sheet.is-composing .composer {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition-delay: 120ms;
+}
+
+.composer__divider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 402px;
+  height: 1px;
+  background: #eaeaea;
+}
+
+.composer__input {
+  position: absolute;
+  top: 1px;
+  left: 0;
+  width: 402px;
+  height: 97px;
+  padding: 14px 20px;
+  border: 0;
+  outline: none;
+  background: none;
+  resize: none;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  font-variation-settings: "wdth" 100;
+  line-height: 19px;
+  color: #161823;
+}
+
+.composer__input::placeholder {
+  color: #9a9a9a;
+}
+
+.composer__emoji {
+  position: absolute;
+  top: 99px;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 402px;
+  height: 45px;
+  padding: 0 16px;
+}
+
+.emoji {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  font-size: 26px;
+  line-height: 1;
+  transition: transform 160ms cubic-bezier(0.18, 1.4, 0.4, 1);
+}
+
+.emoji:active {
+  transform: scale(1.22);
+}
+
+.composer__send {
+  position: absolute;
+  top: 152px;
+  left: 16px;
+  width: 370px;
+  height: 44px;
+  background: #fe2c55;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  font-variation-settings: "wdth" 100;
+  color: #fff;
+  transition: transform 160ms ease, background 200ms ease;
+}
+
+.composer__send:active {
+  transform: scale(0.98);
+}
+
+.composer__send.is-done {
+  background: #161823;
 }
 
 .sr-announcer {

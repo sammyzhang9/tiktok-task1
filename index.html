@@ -67,33 +67,29 @@
               <span class="contact__media">
                 <img class="contact__avatar" src="assets/avatar-sammy.png" alt="" />
                 <span class="contact__pulse"></span>
-                <span class="contact__check">
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M2.5 6.3L4.7 8.5L9.5 3.7" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                </span>
+                <span class="contact__check"></span>
               </span>
               <span class="contact__name">sammy</span>
-              <span class="share-tip" aria-hidden="true">
-                <span class="share-tip__label share-tip__label--warn">Already sent · 3d ago</span>
-                <span class="share-tip__label share-tip__label--sent">Sent anyway</span>
-              </span>
+              <span class="share-tip" aria-hidden="true">Already sent · 3d ago</span>
             </button>
             <button class="contact" type="button" data-name="camryn, juliekgon, sammy">
               <span class="contact__media">
                 <img class="contact__avatar" src="assets/avatar-group.png" alt="" />
+                <span class="contact__check"></span>
               </span>
               <span class="contact__name contact__name--clamp">camryn, juliekgon, sammy</span>
             </button>
             <button class="contact" type="button" data-name="juliekgon">
               <span class="contact__media">
                 <img class="contact__avatar" src="assets/avatar-juliekgon.png" alt="" />
+                <span class="contact__check"></span>
               </span>
               <span class="contact__name">juliekgon</span>
             </button>
             <button class="contact" type="button" data-name="mega">
               <span class="contact__media">
                 <img class="contact__avatar" src="assets/avatar-mega.png" alt="" />
+                <span class="contact__check"></span>
               </span>
               <span class="contact__name">mega</span>
             </button>
@@ -102,28 +98,50 @@
             <button class="contact" type="button" data-name="allison">
               <span class="contact__media">
                 <img class="contact__avatar" src="assets/avatar-allison.png" alt="" />
+                <span class="contact__check"></span>
               </span>
               <span class="contact__name">allison</span>
             </button>
             <button class="contact" type="button" data-name="jolina">
               <span class="contact__media">
                 <img class="contact__avatar" src="assets/avatar-jolina.png" alt="" />
+                <span class="contact__check"></span>
               </span>
               <span class="contact__name">jolina</span>
             </button>
             <button class="contact" type="button" data-name="julianna">
               <span class="contact__media">
                 <img class="contact__avatar" src="assets/avatar-julianna.png" alt="" />
+                <span class="contact__check"></span>
               </span>
               <span class="contact__name">julianna</span>
             </button>
             <button class="contact" type="button" data-name="jake">
               <span class="contact__media">
                 <img class="contact__avatar" src="assets/avatar-jake.png" alt="" />
+                <span class="contact__check"></span>
               </span>
               <span class="contact__name">jake</span>
             </button>
           </div>
+        </div>
+
+        <div class="composer">
+          <div class="composer__divider"></div>
+          <textarea
+            class="composer__input"
+            placeholder="Write a message..."
+            aria-label="Write a message"
+          ></textarea>
+          <div class="composer__emoji">
+            <button class="emoji" type="button">🥰</button>
+            <button class="emoji" type="button">👍</button>
+            <button class="emoji" type="button">😂</button>
+            <button class="emoji" type="button">😎</button>
+            <button class="emoji" type="button">🥺</button>
+            <button class="emoji" type="button">🙏</button>
+          </div>
+          <button class="composer__send" type="button">Send</button>
         </div>
 
         <p class="sr-announcer" role="status" aria-live="polite"></p>
