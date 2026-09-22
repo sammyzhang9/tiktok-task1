@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     phase = "idle";
     sheet.classList.remove("is-composing");
     contactList.classList.remove("is-scrollable");
+    contactList.scrollLeft = 0;
     contacts.forEach((contact) => contact.classList.remove("is-selected"));
     sendBtn.classList.remove("is-done");
     sendBtn.textContent = "Send";
@@ -80,6 +81,9 @@ document.addEventListener("DOMContentLoaded", () => {
     contact.addEventListener("click", () => {
       if (phase === "composing") {
         contact.classList.toggle("is-selected");
+        if (!document.querySelector(".contact.is-selected")) {
+          goIdle();
+        }
         return;
       }
 
